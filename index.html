@@ -2,468 +2,236 @@
 <html lang="zh">
 <head>
 <meta charset="UTF-8">
+<title>BSC 交易赛分配表</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Alpha Token Volume Board</title>
-
-<!-- ↓↓↓ Vercel Web Analytics ↓↓↓ -->
-<script>
-  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
-</script>
-<script defer src="/_vercel/insights/script.js"></script>
-<!-- ↑↑↑ Vercel Web Analytics ↑↑↑ -->
-
+<meta name="color-scheme" content="light dark">
 <style>
-:root{
-  --bg:#f9fafb;--text:#1f2937;--sub:#6b7280;--border:#e5e7eb;
-  --green:#16a34a;--red:#dc2626;--primary:#2563eb
+:root{--bg:#2f2f2f;--text:#e5e7eb;--primary:#60a5fa;--green:#6ee7b7;--blue:#60a5fa;--pink:#f472b6;--redbg:#7f1d1d}
+@media(prefers-color-scheme:light){
+  :root{--bg:#f9f9f9;--text:#222;--primary:#0078d4;--green:#16a34a;--blue:#2563eb;--pink:#ec4899;--redbg:#b91c1c}
 }
-@media(prefers-color-scheme:dark){
-  :root{--bg:#1e293b;--text:#f3f4f6;--sub:#9ca3af;--border:#334155}
-}
-*{box-sizing:border-box;margin:0;padding:0}
-body{
-  font-family:-apple-system,"Segoe UI","PingFang SC",sans-serif;
-  background:var(--bg);color:var(--text);line-height:1.5
-}
-h1{padding:18px 12px;text-align:center;font-size:1.35rem;color:var(--primary)}
-/* 新增：最后更新时间样式 */
-.last-up{
-  text-align:center;font-size:.8rem;color:var(--sub);margin-top:-6px;margin-bottom:12px
-}
-/* ---------- 顶栏 ---------- */
-#bar{
-  max-width:1200px;margin:0 auto 12px;
-  display:flex;flex-wrap:wrap;align-items:center;gap:8px;
-  padding:0 6px
-}
-#bar-left{flex:1;display:flex;flex-wrap:wrap;align-items:center;gap:8px}
-#bar-left input[type="search"]{flex:1;min-width:160px}
-#bar-left input[type="text"]{width:140px}
-#bar-left input[type="datetime-local"]{width:190px}
-#bar-left input[type="date"]{width:150px}
-#bar-left input{
-  padding:6px 8px;border:1px solid var(--border);border-radius:4px;font-size:.85rem
-}
-.btn{
-  display:inline-flex;align-items:center;gap:4px;
-  padding:6px 12px;font-size:.85rem;border:1px solid var(--primary);
-  color:#fff;background:var(--primary);border-radius:4px;cursor:pointer
-}
-.btn[disabled]{background:#9ca3af;border-color:#9ca3af;cursor:not-allowed}
-.badge{
-  display:none;padding:0 6px;border-radius:10px;font-size:.7rem;font-weight:700;
-  background:#fff;color:var(--primary)
-}
-#author{font-size:.8rem;white-space:nowrap}
-#author a{color:var(--primary);text-decoration:none}
-/* ---------- 表格 ---------- */
-table{
-  width:100%;max-width:1200px;margin:0 auto;border-collapse:collapse;min-width:620px
-}
-th,td{
-  padding:10px 6px;border-bottom:1px solid var(--border);
-  font-size:.85rem;text-align:left;white-space:nowrap
-}
-tbody tr:hover{background:rgba(0,0,0,.04);cursor:pointer}
-th.sortable{cursor:pointer;user-select:none;position:relative}
-th.sortable::after{
-  content:'▲';position:absolute;right:4px;font-size:.6rem;color:var(--sub);
-  transform:scale(.8);opacity:0;transition:opacity .2s
-}
-th.sortable.desc::after{content:'▼';opacity:1}
-th.sortable.asc::after{content:'▲';opacity:1}
-/* Star */
-.star{cursor:pointer;font-size:1rem;color:var(--sub);user-select:none;transition:transform .15s,color .15s}
-.star.fav{color:#f7b500}.star.bounce{transform:scale(1.4)}
-/* 颜色 & 小字 */
-.logo{width:18px;height:18px;margin-right:4px;vertical-align:middle;border-radius:50%}
-.up{color:var(--green)}.down{color:var(--red)}
-.subl{display:block;font-size:.72rem;color:var(--sub)}
-/* Toast */
-#toast{
-  position:fixed;bottom:40px;left:50%;transform:translateX(-50%);
-  background:rgba(0,0,0,.8);color:#fff;padding:8px 16px;border-radius:6px;
-  font-size:.85rem;opacity:0;pointer-events:none;transition:opacity .3s
-}
-/* 自定义区间结果 */
-#customVol{max-width:1200px;margin:4px auto 0;font-size:.9rem;color:var(--primary)}
-/* 新增：按天统计结果区 */
-#dailyBox{
-  max-width:1200px;margin:8px auto 0;padding:6px 0
-}
-#dailyBox h3{
-  font-size:1rem;margin:6px 6px 8px;color:var(--primary)
-}
-#dailyBox .tip{font-size:.78rem;color:var(--sub);margin:0 6px 8px}
-#dailyBox table{width:100%;border-collapse:collapse}
-#dailyBox th,#dailyBox td{border-bottom:1px solid var(--border);padding:8px 6px;font-size:.85rem}
-#dailyBox tfoot td{font-weight:600}
-footer{height:16px;margin-bottom:12px}
-@media(max-width:760px){
-  #bar-left input[type="datetime-local"]{flex:1;min-width:140px}
-}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,Segoe UI,PingFang SC,Helvetica,Arial,sans-serif}
+.topbar{display:flex;justify-content:space-between;align-items:center;background:#444;padding:6px 12px;font-size:14px}
+.topbar a{color:#fff;text-decoration:none}
+.topbar button{background:var(--primary);color:#fff;border:none;border-radius:6px;padding:4px 10px;cursor:pointer;font-size:13px}
+h2{margin:14px 0;text-align:center;font-size:20px;color:var(--primary)}
+.container{max-width:100%;margin:0 auto 20px;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px;min-width:1200px}
+th,td{border:1px solid #555;padding:6px 8px;text-align:center;white-space:nowrap}
+th{background:#393939;color:#fff;font-weight:600;position:sticky;top:0;z-index:1}
+td:nth-child(1){font-weight:700}
+.green{color:var(--green)} .blue{color:var(--blue)} .pink{color:var(--pink)}
+.redbg{background:var(--redbg);color:#fff}
+.total{background:#000;color:#ffa500;font-weight:700;font-size:16px}
+.note{font-size:12px;color:#a1a1aa;text-align:right;margin:4px 14px 0}
+a.addr{color:#9dd6ff;text-decoration:none}
+a.addr:hover{text-decoration:underline}
+.badge{display:inline-block;padding:2px 6px;border-radius:6px;background:#2b2b2b;margin-right:6px}
 </style>
 </head>
 <body>
-<h1>Binance Alpha — 24H 交易量排行榜</h1>
-<p id="lastUp" class="last-up"></p>
-
-<div id="bar">
-  <div id="bar-left">
-    <input id="search" type="search" placeholder="🔍 按代币名称 / 符号过滤…">
-    <button id="refreshBtn" class="btn">
-      ⟳ 刷新数据 <span id="progress" class="badge">0%</span>
-    </button>
-
-    <!-- 原有：自定义时间段（单次总量） -->
-    <input id="tokenInput" type="text" placeholder="输入代币名称">
-    <input id="startTime" type="datetime-local">
-    <input id="endTime"  type="datetime-local">
-    <button id="rangeBtn" class="btn">区间查询</button>
-
-    <!-- 新增：按天统计（可全量或按单币） -->
-    <input id="dailyToken" type="text" placeholder="(可选)按天统计：代币名称">
-    <input id="dailyStart" type="date" title="开始日期">
-    <input id="dailyEnd"   type="date" title="结束日期">
-    <button id="dailyBtn" class="btn">按天统计</button>
+  <div class="topbar">
+    <span>推特：<a href="https://x.com/0xXIAOc" target="_blank">@0xXIAOc</a></span>
+    <button id="refreshBtn">立即刷新</button>
   </div>
 
-  <div id="author">
-    作者 <a href="https://twitter.com/0xXIAOc" target="_blank">@0xXIAOc</a>
-  </div>
-</div>
+  <h2>BSC交易赛分配表格</h2>
 
-<div id="customVol"></div>
-<div id="dailyBox"></div>
-
-<table id="tokenTable">
-  <thead>
-    <tr>
-      <th style="width:26px"></th><th>#</th><th>代币名字</th>
-      <th id="thPrice">价格</th>
-      <th id="thVol24h" class="sortable" data-key="vol24h">24H 交易量</th>
-      <th>24H 变化</th>
-      <th id="thToday" class="sortable" data-key="todayQV">当天限价单成交额</th>
-      <th id="thPrev"  class="sortable" data-key="prevQV">前一天限价单成交额</th>
-    </tr>
-  </thead>
-  <tbody><tr><td colspan="8">加载中…</td></tr></tbody>
-</table>
-
-<div id="toast"></div>
-<footer></footer>
-
-<script>
-/* ---------- 常量 & 工具 ---------- */
-const LIST_API='https://www.binance.com/bapi/defi/v1/public/wallet-direct/buw/wallet/cex/alpha/all/token/list';
-const K_API  ='https://www.binance.com/bapi/defi/v1/public/alpha-trade/klines';
-const nf0=new Intl.NumberFormat('en-US',{maximumFractionDigits:0});
-const nf2=new Intl.NumberFormat('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
-const FAV_KEY='alphaFavs',CONCURRENCY=5;
-const fmtShort=ts=>new Intl.DateTimeFormat('zh-CN',
-  {timeZone:'Asia/Shanghai',hour12:false,month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'})
-  .format(new Date(ts)).replace(/\//g,'-');
-const fmtFull=ts=>new Intl.DateTimeFormat('zh-CN',
-  {timeZone:'Asia/Shanghai',hour12:false,year:'numeric',month:'2-digit',day:'2-digit',
-  hour:'2-digit',minute:'2-digit',second:'2-digit'})
-  .format(new Date(ts)).replace(/\//g,'-');
-const nearest8UTC=()=>{const n=new Date(),b=new Date();b.setHours(8,0,0,0);if(n<b)b.setDate(b.getDate()-1);return b.getTime();};
-/* 新增：将“上海时区”日历时间转换为对应 UTC 时间戳（ms）
-   例如 shanghaiTs(2025,8,17,8) 表示 2025-08-17 08:00:00 Asia/Shanghai 对应的 UTC 毫秒数 */
-const shanghaiTs=(y,m,d,h=0,mi=0,s=0,ms=0)=>Date.UTC(y,m-1,d,h-8,mi,s,ms);
-const fmtYmd=ts=>new Intl.DateTimeFormat('zh-CN',{timeZone:'Asia/Shanghai',year:'numeric',month:'2-digit',day:'2-digit'})
-  .format(new Date(ts)).replace(/\//g,'-');
-
-/* ---------- DOM ---------- */
-const tbody=document.querySelector('#tokenTable tbody');
-const refreshBtn=document.getElementById('refreshBtn');
-const progressEl=document.getElementById('progress');
-const lastUpEl=document.getElementById('lastUp');
-const thToday=document.getElementById('thToday');
-const thPrev =document.getElementById('thPrev');
-const toast  =document.getElementById('toast');
-const tokenEl=document.getElementById('tokenInput');
-const startEl=document.getElementById('startTime');
-const endEl  =document.getElementById('endTime');
-const rangeBtn=document.getElementById('rangeBtn');
-const customVolEl=document.getElementById('customVol');
-/* 新增：按天统计控件 */
-const dailyTokenEl=document.getElementById('dailyToken');
-const dailyStartEl=document.getElementById('dailyStart');
-const dailyEndEl=document.getElementById('dailyEnd');
-const dailyBtn=document.getElementById('dailyBtn');
-const dailyBox=document.getElementById('dailyBox');
-
-/* ---------- Toast ---------- */
-function showToast(msg){
-  toast.textContent=msg;toast.style.opacity='1';
-  setTimeout(()=>toast.style.opacity='0',3000);
-}
-
-/* ---------- 状态 ---------- */
-let rows=[],filter='',sortKey='vol24h',sortDir='desc';
-window._boundary=nearest8UTC();
-
-/* ---------- 并发限制 ---------- */
-function pLimit(n){
-  const q=[];let run=0;
-  const next=()=>{if(run>=n||!q.length)return;run++;q.shift()().finally(()=>{run--;next();});};
-  return fn=>new Promise(res=>{q.push(()=>fn().then(res));next();});
-}
-const limit=pLimit(CONCURRENCY);
-
-/* ---------- Quote Volume ---------- */
-async function qv(sym,start,end){
-  if(start>=end)return 0;
-  const url=`${K_API}?symbol=${sym}&interval=1h&startTime=${start}&endTime=${end}&limit=1500`;
-  try{
-    const {data=[]}=await fetch(url).then(r=>r.json());
-    return data.reduce((s,k)=>s+parseFloat(k[7]),0);
-  }catch{return 0;}
-}
-async function fillQVAll(list,today8,yest8,endTs){
-  let done=0,total=list.length;
-  progressEl.style.display='inline-block';
-  await Promise.all(list.map(r=>limit(async()=>{
-    [r.todayQV,r.prevQV]=await Promise.all([
-      qv(r.sym,today8,endTs),
-      qv(r.sym,yest8,today8-1)
-    ]);
-    progressEl.textContent=`${Math.floor(++done/total*100)}%`;
-  })));
-  progressEl.style.display='none';
-}
-
-/* ---------- 收藏 ---------- */
-const favs=()=>JSON.parse(localStorage.getItem(FAV_KEY)||'[]');
-function toggleFav(sym){
-  const f=favs();const i=f.indexOf(sym);
-  i>-1?f.splice(i,1):f.push(sym);
-  localStorage.setItem(FAV_KEY,JSON.stringify(f));
-  showToast(i>-1?'已移除收藏':'已加入收藏');
-  render();
-}
-
-/* ---------- 拉取列表 ---------- */
-async function fetchList(){
-  const resp=await fetch(LIST_API);
-  if(!resp.ok)throw new Error('LIST_API Error');
-  const {data=[]}=await resp.json();
-  return data.filter(t=>+t.volume24h>0).map(t=>({
-    price:+t.price,vol24h:+t.volume24h,chg:+t.percentChange24h,
-    symbol:t.symbol,icon:t.iconUrl,sym:`${t.alphaId}USDT`,
-    todayQV:0,prevQV:0
-  }));
-}
-
-/* ---------- 排序 & 渲染 ---------- */
-function sortRows(arr){return [...arr].sort((a,b)=>sortDir==='desc'?b[sortKey]-a[sortKey]:a[sortKey]-b[sortKey]);}
-function updateSortIcons(){
-  document.querySelectorAll('th.sortable').forEach(th=>{
-    th.classList.remove('asc','desc');
-    if(th.dataset.key===sortKey)th.classList.add(sortDir);
-  });
-}
-function render(){
-  const favSet=new Set(favs());
-  const filtered=rows.filter(r=>r.symbol.toLowerCase().includes(filter)||r.sym.toLowerCase().includes(filter));
-  const sorted=sortRows(filtered);
-  const display=[...sorted.filter(x=>favSet.has(x.sym)),...sorted.filter(x=>!favSet.has(x.sym))];
-  tbody.innerHTML=display.map((t,i)=>`
-    <tr data-sym="${t.sym}">
-      <td class="star ${favSet.has(t.sym)?'fav':''}">${favSet.has(t.sym)?'★':'☆'}</td>
-      <td>${i+1}</td>
-      <td><img class="logo" loading="lazy" src="${t.icon}" referrerpolicy="no-referrer"
-       onerror="this.src='https://bin.bnbstatic.com/static/images/common/base-token-default.png'">${t.symbol}</td>
-      <td>${nf2.format(t.price)}</td>
-      <td>${nf0.format(t.vol24h)}</td>
-      <td class="${t.chg>=0?'up':'down'}">${t.chg.toFixed(2)}%</td>
-      <td>${t.todayQV?nf0.format(t.todayQV):'…'}</td>
-      <td>${t.prevQV?nf0.format(t.prevQV):'…'}</td>
-    </tr>`).join('');
-  updateSortIcons();
-}
-
-/* ---------- 刷新数据 ---------- */
-async function reloadAll(){
-  refreshBtn.disabled=true;progressEl.textContent='0%';
-  const today8=nearest8UTC(),yest8=today8-864e5,endTs=Date.now();
-  thToday.innerHTML=`当天限价单成交额<span class="subl">(${fmtShort(today8)} ~ ${fmtShort(endTs)})</span>`;
-  thPrev.innerHTML=`前一天限价单成交额<span class="subl">(${fmtShort(yest8)} ~ ${fmtShort(today8-1)})</span>`;
-  try{
-    rows=await fetchList();
-    await fillQVAll(rows,today8,yest8,endTs);
-    render();
-    lastUpEl.textContent=`最后更新时间： ${fmtFull(Date.now())}`;
-    window._boundary=today8;
-  }catch(e){
-    console.error(e);
-    tbody.innerHTML='<tr><td colspan="8">加载失败…</td></tr>';
-    showToast('加载失败，请稍后重试');
-  }finally{
-    refreshBtn.disabled=false;
-  }
-}
-
-/* ---------- 自定义区间查询（单币总量） ---------- */
-(function initDateInputs(){
-  const now=new Date();
-  const pad=n=>String(n).padStart(2,'0');
-  const toLocal=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
-  startEl.value=toLocal(new Date(nearest8UTC()));
-  endEl.value  =toLocal(now);
-
-  /* 新增：按天统计的日期默认值（最近 3 天） */
-  const shNow=new Date();
-  const y=shNow.getFullYear(), m=pad(shNow.getMonth()+1), d=pad(shNow.getDate());
-  const oneDay=86400000;
-  const dt = (t)=>{const dd=new Date(t);return `${dd.getFullYear()}-${pad(dd.getMonth()+1)}-${pad(dd.getDate())}`;};
-  const todayStr = dt(shNow.getTime());
-  const prev2Str = dt(shNow.getTime()-2*oneDay);
-  dailyStartEl.value = prev2Str;
-  dailyEndEl.value   = todayStr;
-})();
-rangeBtn.addEventListener('click',async()=>{
-  const symIn=tokenEl.value.trim();
-  if(!symIn){showToast('请输入代币符号');return;}
-  let row=rows.find(r=>r.symbol.toLowerCase()===symIn.toLowerCase()||r.sym.toLowerCase()===symIn.toLowerCase());
-  if(!row){
-    const m=symIn.match(/_(\d+)/);if(m)row={sym:`${m[1]}USDT`,symbol:symIn};
-  }
-  if(!row){showToast('未找到该代币');return;}
-  const st=new Date(startEl.value).getTime(),et=new Date(endEl.value).getTime();
-  if(!st||!et||st>=et){showToast('时间范围不合法');return;}
-  rangeBtn.disabled=true;progressEl.textContent='查询…';progressEl.style.display='inline-block';
-  const vol=await qv(row.sym,st,et);
-  rangeBtn.disabled=false;progressEl.style.display='none';
-  customVolEl.innerHTML=`<strong>${row.symbol||symIn}</strong> 在&nbsp;<span>${fmtFull(st)}</span> ~ <span>${fmtFull(et)}</span> 的限价单成交额：<strong>${nf0.format(vol)}</strong>`;
-});
-
-/* ---------- 新增：按天统计（可全量或单币） ---------- */
-async function ensureRows(){ if(!rows.length){ rows = await fetchList(); } }
-function parseDateStr(s){
-  // s: 'YYYY-MM-DD'
-  const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(s||'');
-  if(!m) return null;
-  return {y:+m[1],m:+m[2],d:+m[3]};
-}
-async function dailyStats(){
-  const tokenIn = (dailyTokenEl.value||'').trim();
-  const startStr = dailyStartEl.value;
-  const endStr   = dailyEndEl.value;
-  const sObj=parseDateStr(startStr), eObj=parseDateStr(endStr);
-  if(!sObj||!eObj){showToast('请选择有效的开始/结束日期');return;}
-  const start8 = shanghaiTs(sObj.y,sObj.m,sObj.d,8);
-  const end8   = shanghaiTs(eObj.y,eObj.m,eObj.d,8);
-  if(end8<start8){showToast('日期范围不合法');return;}
-
-  dailyBtn.disabled=true;
-  progressEl.textContent='0%';
-  progressEl.style.display='inline-block';
-
-  await ensureRows();
-
-  // 解析代币：留空 => 统计全部代币；否则仅统计该币
-  let targetSym=null, title='';
-  if(tokenIn){
-    const r = rows.find(x=>x.symbol.toLowerCase()===tokenIn.toLowerCase()||x.sym.toLowerCase()===tokenIn.toLowerCase());
-    if(r){ targetSym=r.sym; title = `${r.symbol}`; }
-    else{
-      const m = tokenIn.match(/_(\d+)/);
-      if(m){ targetSym = `${m[1]}USDT`; title = tokenIn; }
-      else{ showToast('未找到该代币'); dailyBtn.disabled=false; progressEl.style.display='none'; return; }
-    }
-  }else{
-    title = '全部 Alpha 代币（总量）';
-  }
-
-  // 生成日窗口（含结束日）
-  const days=[];
-  for(let ts=start8; ts<=end8; ts+=86400000){
-    const st=ts, et=ts+86400000-1;
-    days.push([st,et]);
-  }
-
-  const totals=new Array(days.length).fill(0);
-  let done=0, totalTasks = days.length * (targetSym?1:rows.length);
-
-  // 统计
-  if(targetSym){
-    await Promise.all(days.map(([st,et],i)=>limit(async()=>{
-      const v=await qv(targetSym,st,et);
-      totals[i]+=v;
-      progressEl.textContent=`${Math.floor(++done/totalTasks*100)}%`;
-    })));
-  }else{
-    // 全部代币：对每个日窗汇总所有 sym
-    const syms = rows.map(r=>r.sym);
-    await Promise.all(days.map(([st,et],i)=>Promise.all(
-      syms.map(sym=>limit(async()=>{
-        const v=await qv(sym,st,et);
-        totals[i]+=v;
-        progressEl.textContent=`${Math.floor(++done/totalTasks*100)}%`;
-      }))
-    )));
-  }
-
-  progressEl.style.display='none';
-  dailyBtn.disabled=false;
-
-  // 渲染结果
-  const rowsHTML = totals.map((v,idx)=>{
-    const [st,et]=days[idx];
-    return `<tr>
-      <td>${fmtYmd(st)}</td>
-      <td class="subl">${fmtShort(st)} ~ ${fmtShort(et)}</td>
-      <td><strong>${nf0.format(v)}</strong></td>
-    </tr>`;
-  }).join('');
-  const sum = totals.reduce((a,b)=>a+b,0);
-  const avg = totals.length? sum / totals.length : 0;
-
-  dailyBox.innerHTML = `
-    <h3>按天统计（${title}）</h3>
-    <p class="tip">口径：上海时区 <strong>08:00</strong> 至次日 <strong>08:00</strong> 为一天；共 <strong>${totals.length}</strong> 天。</p>
-    <table>
-      <thead><tr><th>日期</th><th>时间窗口</th><th>限价单成交额</th></tr></thead>
-      <tbody>${rowsHTML}</tbody>
+  <div class="container">
+    <table id="sheet">
+      <thead>
+        <tr>
+          <th>代币</th>
+          <th>奖励(U)</th>
+          <th>现价(U)</th>
+          <th>排名要求</th>
+          <th>结束时间</th>
+          <th>推荐购买金额</th>
+          <th>限价单/1000</th>
+          <th>入门门槛</th>
+          <th>当前成本</th>
+          <th>备注</th>
+          <th>链/链接</th>
+          <th>奖励代币数量</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
       <tfoot>
-        <tr><td>合计</td><td></td><td>${nf0.format(sum)}</td></tr>
-        <tr><td>日均</td><td></td><td>${nf0.format(avg)}</td></tr>
+        <tr><td colspan="12" class="total">收益总和：<span id="totalUSD">--</span></td></tr>
       </tfoot>
     </table>
-  `;
+  </div>
+
+  <!-- 按你的要求，这里固定显示 8/24，不跟随刷新时间变化 -->
+  <p class="note" id="updateInfo">更新时间：8/24</p>
+
+<script>
+/* ===== 常量与工具 ===== */
+var QUOTE_WHITELIST_PRIMARY = ['USDT','USDC'];   // 主筛选：仅美元稳定币
+var QUOTE_WHITELIST_FALLBACK_DEFAULT = ['BUSD','WBNB']; // 通用兜底（EVM/BSC）
+var MIN_LIQ_USD = 5000;
+
+// 不同链的报价兜底（当 USDT/USDC 不满足时）
+var FALLBACK_BY_CHAIN = {
+  bsc: ['BUSD','WBNB'],
+  solana: ['SOL','WSOL','wSOL'] // Sol 链常见报价
+};
+
+// EVM 链列表，用于地址规范化（EVM 地址可安全小写）
+var EVM_CHAINS = ['bsc','ethereum','base','arbitrum','polygon','optimism','avalanche','fantom','blast','linea','scroll'];
+
+/* 数字格式化（带千分位） */
+function fmt(n){ return (n==null || isNaN(n)) ? '--' : Number(n).toLocaleString(); }
+
+/* 从字符串中提取数值（如 "0.25 U" -> 0.25） */
+function toNumber(val){
+  if(val==null) return 0;
+  if(typeof val==='number') return val;
+  var m = String(val).replace(/,/g,'').match(/-?\d+(\.\d+)?/);
+  return m ? parseFloat(m[0]) : 0;
 }
 
-/* 绑定事件：按天统计 */
-dailyBtn.addEventListener('click', dailyStats);
+/* 地址规范化（Sol 等非 EVM 链保持大小写；EVM 链转小写） */
+function normalizeAddr(addr, chain){
+  if(!addr) return '';
+  return EVM_CHAINS.indexOf(chain)>=0 ? String(addr).toLowerCase() : String(addr);
+}
 
-/* ---------- 其它事件 ---------- */
-document.getElementById('search').addEventListener('input',e=>{
-  filter=e.target.value.trim().toLowerCase();render();
-});
-tbody.addEventListener('click',e=>{
-  const s=e.target.closest('.star');
-  if(s){s.classList.add('bounce');setTimeout(()=>s.classList.remove('bounce'),150);toggleFav(s.closest('tr').dataset.sym);}
-});
-document.querySelectorAll('th.sortable').forEach(th=>{
-  th.addEventListener('click',()=>{
-    const key=th.dataset.key;
-    sortDir=(sortKey===key&&sortDir==='desc')?'asc':'desc';sortKey=key;render();
-  });
-});
+/* 链名徽章与浏览器链接 */
+function chainLabel(chain){
+  if(chain==='solana') return 'SOL';
+  if(chain==='bsc') return 'BSC';
+  return (chain||'—').toUpperCase();
+}
+function getExplorerLink(chain, addr){
+  if(!addr) return '#';
+  if(chain==='solana') return 'https://solscan.io/token/'+addr;
+  if(chain==='bsc') return 'https://bscscan.com/token/'+addr;
+  return '#';
+}
 
-/* ★ 绑定刷新按钮 */
-refreshBtn.addEventListener('click', reloadAll);
+/* ===== 数据（保持原顺序并追加 4 个新币） ===== */
+var rows = [
 
-/* ---------- 自刷新 ---------- */
-document.addEventListener('visibilitychange',()=>{
-  if(document.visibilityState==='visible'&&nearest8UTC()!==window._boundary)reloadAll();
-});
-setInterval(()=>{if(document.visibilityState==='visible')reloadAll();},300000);
+  /* ===== 新增四个 BSC 代币 ===== */
+  {chain:'bsc',    sym:'BUS',    addr:'0x1aecab957bad4c6e36dd29c3d3bb470c4c29768a', qty:'530', rank:'—', end:'—', buy:'待测试', limitPer1000:'待测试', entry:'0', remark:''},
+  {chain:'bsc',    sym:'BAY',    addr:'0xa7bef5abd9265ab97ee43d2fc4a56e0ba25aca25', qty:'588', rank:'—', end:'—', buy:'待测试', limitPer1000:'待测试', entry:'0', remark:''},
+  {chain:'bsc',    sym:'JCT',    addr:'0xea37a8de1de2d9d10772eeb569e28bfa5cb17707', qty:'21176', rank:'—', end:'—', buy:'待测试', limitPer1000:'待测试', entry:'0', remark:''},
+  {chain:'bsc',    sym:'DGRAM',    addr:'0x49c6c91ec839a581de2b882e868494215250ee59', qty:'10588', rank:'—', end:'—', buy:'待测试', limitPer1000:'待测试', entry:'0', remark:''},
+  {chain:'bsc',    sym:'DGRAM',    addr:'0x7ec43cf65f1663f820427c62a5780b8f2e25593a', qty:'650', rank:'—', end:'—', buy:'待测试', limitPer1000:'待测试', entry:'0', remark:''}
+];
 
-/* ---------- 首次加载 ---------- */
-reloadAll();
+/* ===== 渲染表格骨架 ===== */
+var tbody = document.querySelector('#sheet tbody');
+function shortAddr(a){ return a ? (a.slice(0,6)+'…'+a.slice(-4)) : '—'; }
+function renderSkeleton(){
+  tbody.innerHTML = rows.map(function(r,i){
+    var linkHtml = r.addr
+      ? ('<span class="badge">'+chainLabel(r.chain)+'</span>'
+         + '<a class="addr" href="'+getExplorerLink(r.chain, r.addr)+'" target="_blank">'+shortAddr(r.addr)+'</a>')
+      : '—';
+    return (
+      '<tr id="r-'+i+'">'+
+        '<td>'+r.sym+'</td>'+
+        '<td class="green" data-reward>--</td>'+
+        '<td data-price>--</td>'+
+        '<td class="redbg">'+(r.rank||'—')+'</td>'+
+        '<td>'+(r.end||'—')+'</td>'+
+        '<td class="blue">'+(r.buy==null ? '—' : r.buy)+'</td>'+
+        '<td class="pink">'+(r.limitPer1000==null ? '—' : r.limitPer1000)+'</td>'+
+        '<td>'+fmt(toNumber(r.entry))+'</td>'+
+        '<td data-cost>--</td>'+
+        '<td>'+(r.remark||'—')+'</td>'+
+        '<td>'+linkHtml+'</td>'+
+        '<td>'+fmt(toNumber(r.qty))+'</td>'+
+      '</tr>'
+    );
+  }).join('');
+}
+renderSkeleton();
+
+/* ===== 成本计算（入门门槛/1000 × 限价单/1000） ===== */
+function updateCostRow(i){
+  var r = rows[i];
+  var entry = toNumber(r.entry);
+  var per1000 = toNumber(r.limitPer1000);
+  var cost = (entry && per1000) ? (entry/1000)*per1000 : 0;
+  var rowEl = document.getElementById('r-'+i);
+  if(rowEl){
+    rowEl.querySelector('[data-cost]').textContent = cost ? (cost.toFixed(4)+' U') : '--';
+  }
+}
+
+/* ===== 价格抓取（DexScreener） ===== */
+async function priceFromDexScreener(addr, chain, preferList){
+  preferList = preferList || QUOTE_WHITELIST_PRIMARY;
+  var tokenParam = normalizeAddr(addr, chain);
+  var url = 'https://api.dexscreener.com/latest/dex/tokens/'+encodeURIComponent(tokenParam);
+  try{
+    var resp = await fetch(url);
+    var json = await resp.json();
+    var pairs = (json && Array.isArray(json.pairs)) ? json.pairs : [];
+
+    function pick(quotes){
+      return pairs
+        .filter(function(p){
+          var liqUsd = (p && p.liquidity && p.liquidity.usd) || 0;
+          var quoteSym = p && p.quoteToken && p.quoteToken.symbol;
+          var priceUsd = p && p.priceUsd;
+          return p && p.chainId===chain
+            && priceUsd && !isNaN(+priceUsd)
+            && quotes.indexOf(quoteSym)!==-1
+            && liqUsd > MIN_LIQ_USD;
+        })
+        .sort(function(a,b){
+          var la = (a && a.liquidity && a.liquidity.usd) || 0;
+          var lb = (b && b.liquidity && b.liquidity.usd) || 0;
+          return lb - la;
+        })[0];
+    }
+
+    var best = pick(preferList);
+    if(!best && preferList===QUOTE_WHITELIST_PRIMARY){
+      var fb = (FALLBACK_BY_CHAIN[chain] || QUOTE_WHITELIST_FALLBACK_DEFAULT);
+      best = pick(fb);
+    }
+    return best ? +best.priceUsd : null;
+  }catch(e){
+    return null;
+  }
+}
+
+/* ===== 刷新逻辑：抓价 → 算奖励 → 汇总 ===== */
+var totalUSD = document.getElementById('totalUSD');
+
+async function refresh(){
+  var sum = 0;
+  for(var i=0;i<rows.length;i++){
+    var r = rows[i];
+    // 计算当前成本
+    updateCostRow(i);
+
+    // 抓现价（按链过滤）
+    var price = await priceFromDexScreener(r.addr, r.chain);
+    var rowEl = document.getElementById('r-'+i);
+    if(rowEl){
+      rowEl.querySelector('[data-price]').textContent = price ? (price.toFixed(6)+' U') : '--';
+
+      // 奖励(U) = 现价 × 数量
+      var qty = toNumber(r.qty);
+      var reward = (price && qty) ? price * qty : 0;
+      rowEl.querySelector('[data-reward]').textContent = reward ? (reward.toFixed(2)+' U') : '--';
+      sum += reward || 0;
+    }
+  }
+  totalUSD.textContent = sum.toFixed(2)+' U';
+}
+
+// 首次渲染 + 定时刷新
+refresh();
+document.getElementById('refreshBtn').addEventListener('click', refresh);
+setInterval(refresh, 60000); // 每分钟刷新
 </script>
 </body>
 </html>
